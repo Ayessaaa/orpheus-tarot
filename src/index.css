@@ -1,0 +1,21 @@
+@import "tailwindcss";@import "tailwindcss";
+@import 'animate.css';
+
+@font-face {
+  font-family: MistericalBuildings;
+  src: url(MistericalBuildings.otf);
+}
+
+:root {
+  font-family: MistericalBuildings;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
