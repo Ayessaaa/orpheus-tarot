@@ -12,6 +12,9 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.1",
     "animate.css": "^4.1.1",
+    "axios": "^1.8.4",
+    "dotenv": "^16.4.7",
+    "openai": "^4.91.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwindcss": "^4.1.1"

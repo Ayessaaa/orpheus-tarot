@@ -1,4 +1,39 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+
+import axios from "axios";
+
+const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+
+const prompt =
+  "You are oracle orpheus for tarot reading. Orpheus is a dinosaur so hes not very smart kinda dumb and might mispell things. The user asks this question and what do you think orpheus would respond: (respond like orpheus)";
+const cards = "also, the card that they randomly picked was cursing orpheus card with a number 5 and hiding orpheus card with a number 3 and dissapointed orpheus card with a number 9. explain each card and what could it mean for orpheus. make it short and remember that orpheus is dumb and might mispell things and not afraid to tell what he wants he speaks like a toddler"
+
+const openai = axios.create({
+  baseURL: "https://api.openai.com/v1",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${API_KEY}`,
+  },
+});
+
+const getOpenAIResponse = async (prompt) => {
+  try {
+    const response = await openai.post("/chat/completions", {
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+      max_tokens: 500,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("OpenAI API error:", error.response?.data || error.message);
+    throw error;
+  }
+};
 
 function App() {
   const [isLanding, setIsLanding] = useState(true);
@@ -42,7 +77,6 @@ function Landing({ setIsLanding }) {
 
 function PromptPage() {
   const [isLogoDone, setIsLogoDone] = useState(false);
-  const [isFadingOut, setIsFadingOut] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -66,7 +100,6 @@ function PromptPage() {
       />
 
       <Input></Input>
-      <Orpheus/>
     </PageDiv>
   );
 }
@@ -101,33 +134,55 @@ function Button({ isLogoDone, onButtonClick, children }) {
 
 function Input({ children }) {
   const [question, setQuestion] = useState("");
+  const [response, setResponse] = useState("");
   const [isShowButton, setIsShowButton] = useState(false);
+  const [isFadeIn, setIsFadeIn] = useState(false)
+  
 
   const handleClick = () => {
     // setIsFadingOut(true);
   };
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
+    setIsFadeIn(false)
     e.preventDefault();
+    console.log("run");
+    const aiResponse = await getOpenAIResponse(prompt+question+cards);
+    setResponse(aiResponse.choices[0].message.content);
+    console.log(aiResponse.choices[0].message.content)
+    setIsFadeIn(true)
   }
 
+  
+
   return (
-    <form className="flex flex-col mt-20"  onSubmit={handleSubmit}>
+    <form className="flex flex-col mt-20" onSubmit={handleSubmit}>
       <label className="z-20 text-4xl tracking-wide text-center text-[#9EB2FF] animate__animated animate__fadeIn animate__delay-1s">
         <span className=" text-shadow-lg text-shadow-[#9EB2FF]/20 flex gap-2 w-fit mx-auto">
-          <img src="imgs/star.png" className="w-15"/>What is your qwuestion for <span className="text-[#CEA1FF] text-shadow-lg text-shadow-[#CEA1FF]/20">oracle orpheus?</span>
+          <img src="imgs/star.png" className="w-15" />
+          What is your qwuestion for{" "}
+          <span className="text-[#CEA1FF] text-shadow-lg text-shadow-[#CEA1FF]/20">
+            oracle orpheus?
+          </span>
         </span>
       </label>
       <input
         className="focus:outline-0 active:outline-0 focus:bg-[#CEA1FF]/15 focus:outline-[#d2b158] transition-all animate__animated animate__fadeIn animate__delay-2s z-20  text-3xl text-center w-250 mx-auto border-double border-[#9EB2FF]/50 bg-[#9EB2FF]/10 rounded-2xl h-20 mt-10"
         type="text"
         value={question}
-        onChange={(e) => {setQuestion(e.target.value); setIsShowButton(true)}}
+        onChange={(e) => {
+          setQuestion(e.target.value);
+          setIsShowButton(true);
+        }}
       ></input>
 
-      <Button isLogoDone={isShowButton} onButtonClick={(handleClick)}>
+      <Button isLogoDone={isShowButton} onButtonClick={handleClick}>
         What's my fortune?
       </Button>
+      <Orpheus />
+      <p className={`mx-auto w-250 text-center text-2xl mt-20 animate__animated ${isFadeIn? "animate__fadeIn" : ""}`}>
+        {response}
+      </p>
     </form>
   );
 }
@@ -144,8 +199,13 @@ function PageDiv({ isFadingOut, children }) {
   );
 }
 
-function Orpheus(){
-  return (<img src="imgs/orpheus.png" className="w-100 mx-auto mt-20 animate__animated animate__fadeIn" />)
+function Orpheus() {
+  return (
+    <img
+      src="imgs/orpheus.png"
+      className="w-100 mx-auto mt-20 animate__animated animate__fadeIn"
+    />
+  );
 }
 
 export default App;
