@@ -66,6 +66,7 @@ function PromptPage() {
       />
 
       <Input></Input>
+      <Orpheus/>
     </PageDiv>
   );
 }
@@ -85,7 +86,7 @@ function Button({ isLogoDone, onButtonClick, children }) {
   return (
     <div
       className={`animate__animated animate__slower  ${
-        isLogoDone ? "animate__fadeIn" : "hidden"
+        isLogoDone ? "animate__fadeIn" : "invisible"
       }  w-fit mx-auto border-4 border-[#FAD776] hover:scale-105 transition-all duration-300 hover:bg-[#d2b158] group mt-20  rounded-full p-1.5 shadow-lg shadow-[#F4EA90]/30`}
     >
       <button
@@ -101,27 +102,30 @@ function Button({ isLogoDone, onButtonClick, children }) {
 function Input({ children }) {
   const [question, setQuestion] = useState("");
   const [isShowButton, setIsShowButton] = useState(false);
-  const [isFadingOut, setIsFadingOut] = useState(false);
 
   const handleClick = () => {
-    setIsFadingOut(true);
+    // setIsFadingOut(true);
   };
 
+  function handleSubmit(e) {
+    e.preventDefault();
+  }
+
   return (
-    <form className="flex flex-col mt-20">
+    <form className="flex flex-col mt-20"  onSubmit={handleSubmit}>
       <label className="z-20 text-4xl tracking-wide text-center text-[#9EB2FF] animate__animated animate__fadeIn animate__delay-1s">
-        <span className=" text-shadow-lg text-shadow-[#9EB2FF]/20">
-          What is your qwuestion for <span className="text-[#CEA1FF] text-shadow-lg text-shadow-[#CEA1FF]/20">oracle orpheus?</span>
+        <span className=" text-shadow-lg text-shadow-[#9EB2FF]/20 flex gap-2 w-fit mx-auto">
+          <img src="imgs/star.png" className="w-15"/>What is your qwuestion for <span className="text-[#CEA1FF] text-shadow-lg text-shadow-[#CEA1FF]/20">oracle orpheus?</span>
         </span>
       </label>
       <input
-        className="focus:outline-2 focus:outline-[#9EB2FF] transition-all animate__animated animate__fadeIn animate__delay-2s z-20 border-4 text-3xl text-center w-250 mx-auto border-double border-[#9EB2FF]/50 bg-[#9EB2FF]/10 rounded-2xl h-20 mt-10"
+        className="focus:outline-0 active:outline-0 focus:bg-[#CEA1FF]/15 focus:outline-[#d2b158] transition-all animate__animated animate__fadeIn animate__delay-2s z-20  text-3xl text-center w-250 mx-auto border-double border-[#9EB2FF]/50 bg-[#9EB2FF]/10 rounded-2xl h-20 mt-10"
         type="text"
         value={question}
         onChange={(e) => {setQuestion(e.target.value); setIsShowButton(true)}}
       ></input>
 
-      <Button isLogoDone={isShowButton} onButtonClick={handleClick}>
+      <Button isLogoDone={isShowButton} onButtonClick={(handleClick)}>
         What's my fortune?
       </Button>
     </form>
@@ -140,5 +144,8 @@ function PageDiv({ isFadingOut, children }) {
   );
 }
 
+function Orpheus(){
+  return (<img src="imgs/orpheus.png" className="w-100 mx-auto mt-20 animate__animated animate__fadeIn" />)
+}
 
 export default App;
