@@ -2,11 +2,44 @@ import { useEffect, useState } from "react";
 
 import axios from "axios";
 
+const cardsObject = [
+  {
+    name: "hiding orpheus",
+    number: "1",
+  },
+  {
+    name: "heart eyes orpheus",
+    number: "2",
+  },
+  {
+    name: "are you serious (what the heck?) orpheus",
+    number: "3",
+  },
+  {
+    name: "hilariously laughing orpheus",
+    number: "4",
+  },
+  {
+    name: "disappointed orpheus",
+    number: "5",
+  },
+  {
+    name: "cursing orpheus",
+    number: "6",
+  },
+  {
+    name: "smiling orpheus",
+    number: "7",
+  },
+];
+
 const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
 
-const prompt =
-  "You are oracle orpheus for tarot reading. Orpheus is a dinosaur so hes not very smart kinda dumb and might mispell things. The user asks this question and what do you think orpheus would respond: (respond like orpheus)";
-const cards = "also, the card that they randomly picked was cursing orpheus card with a number 5 and hiding orpheus card with a number 3 and dissapointed orpheus card with a number 9. explain each card and what could it mean for orpheus. make it short and remember that orpheus is dumb and might mispell things and not afraid to tell what he wants he speaks like a toddler"
+const prompt = 
+  "You are oracle orpheus for tarot reading. Orpheus is a dinosaur so hes kinda silly and dumb and will mispell things. The user asks this question to you as orpheus and got this 3 cards randomly: "
+const prompt2 = ", make up some kind of reading based of this and would you respond to the users question: ";
+const prompt3 =
+  ". make it straight to the point and remember that orpheus is silly and dumb and might mispell things and not afraid to tell what he wants he speaks like a toddler. dont make it too long ";
 
 const openai = axios.create({
   baseURL: "https://api.openai.com/v1",
@@ -136,24 +169,34 @@ function Input({ children }) {
   const [question, setQuestion] = useState("");
   const [response, setResponse] = useState("");
   const [isShowButton, setIsShowButton] = useState(false);
-  const [isFadeIn, setIsFadeIn] = useState(false)
-  
+  const [isFadeIn, setIsFadeIn] = useState(false);
+
+  const [card1, setCard1] = useState("");
+  const [card2, setCard2] = useState("");
+  const [card3, setCard3] = useState("");
 
   const handleClick = () => {
     // setIsFadingOut(true);
   };
 
   async function handleSubmit(e) {
-    setIsFadeIn(false)
+    const c1 = cardsObject[Math.floor(Math.random() * 7)];
+    const c2 = cardsObject[Math.floor(Math.random() * 7)];
+    const c3 = cardsObject[Math.floor(Math.random() * 7)];
+
+    setCard1(c1);
+    setCard2(c2);
+    setCard3(c3);
+
+    setIsFadeIn(false);
     e.preventDefault();
     console.log("run");
-    const aiResponse = await getOpenAIResponse(prompt+question+cards);
+    const aiResponse = await getOpenAIResponse(prompt + c1.name + " and " + c2.name + " and "+ c3.name +prompt2+ question + prompt3);
     setResponse(aiResponse.choices[0].message.content);
-    console.log(aiResponse.choices[0].message.content)
-    setIsFadeIn(true)
+    console.log(aiResponse.choices[0].message.content);
+    setIsFadeIn(true);
+    
   }
-
-  
 
   return (
     <form className="flex flex-col mt-20" onSubmit={handleSubmit}>
@@ -177,10 +220,14 @@ function Input({ children }) {
       ></input>
 
       <Button isLogoDone={isShowButton} onButtonClick={handleClick}>
-        What's my fortune?
+        Draw Cards
       </Button>
-      <Orpheus />
-      <p className={`mx-auto w-250 text-center text-2xl mt-20 animate__animated ${isFadeIn? "animate__fadeIn" : ""}`}>
+      <Orpheus card1={card1} card2={card2} card3={card3} />
+      <p
+        className={`mx-auto w-250 text-center text-2xl mt-20 animate__animated ${
+          isFadeIn ? "animate__fadeIn" : ""
+        }`}
+      >
         {response}
       </p>
     </form>
@@ -199,11 +246,29 @@ function PageDiv({ isFadingOut, children }) {
   );
 }
 
-function Orpheus() {
+function Orpheus({ card1, card2, card3 }) {
+  return (
+    <div className="flex w-fit mx-auto">
+      <img
+        src="imgs/orpheus.png"
+        className="h-100 mx-auto mt-20 animate__animated animate__fadeIn"
+      />
+      <Card card={card1 !== "" ? card1 : { number: "cover" }} />
+      <Card card={card2 !== "" ? card2 : { number: "cover" }} />
+      <Card card={card3 !== "" ? card3 : { number: "cover" }} />
+    </div>
+  );
+}
+
+function Cards() {
+  return <></>;
+}
+
+function Card({ card = { number: "cover" } }) {
   return (
     <img
-      src="imgs/orpheus.png"
-      className="w-100 mx-auto mt-20 animate__animated animate__fadeIn"
+      src={`imgs/${card.number}.png`}
+      className="h-100 mx-auto mt-20 animate__animated animate__fadeIn"
     />
   );
 }
