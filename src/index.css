@@ -3,7 +3,7 @@
 
 @font-face {
   font-family: MistericalBuildings;
-  src: url(MistericalBuildings.otf);
+  src: url('/MistericalBuildings.otf');
 }
 
 :root {
