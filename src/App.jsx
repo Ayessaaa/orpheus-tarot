@@ -124,7 +124,7 @@ function Logo({
   logoAnimate,
   img,
   mdwidth = "md:w-200",
-  width = "w-100",
+  width = "w-80",
   pt = "pt-50",
 }) {
   return (
@@ -207,12 +207,15 @@ function Input({ children }) {
       className="flex flex-col md:mt-15 mt-10 transition-all"
       onSubmit={handleSubmit}
     >
-      <label className="z-20 md:text-3xl text-lg tracking-wide text-center text-[#9EB2FF] animate__animated animate__fadeIn animate__delay-1s transition-all">
-        <span className=" text-shadow-lg text-shadow-[#9EB2FF]/20 flex gap-2 w-fit mx-auto">
-          <img src="imgs/star.png" className="md:w-12 w-10" />
+      <label className="z-20 md:text-3xl text-lg tracking-wide text-center text-[#9EB2FF]  animate__animated animate__fadeIn animate__delay-1s transition-all">
+        <span className=" text-shadow-lg text-shadow-[#9EB2FF]/20 flex md:gap-2 w-fit mx-auto md:flex-row flex-col">
+          <img src="imgs/star.png" className="w-12  mx-auto" />
+          <span>
+
           What is your qwuestion for{" "}
           <span className="text-[#CEA1FF] text-shadow-lg text-shadow-[#CEA1FF]/20">
             oracle orpheus?
+          </span>
           </span>
         </span>
       </label>
