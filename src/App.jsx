@@ -53,7 +53,7 @@ const getOpenAIResponse = async (prompt) => {
 function App() {
   const [isLanding, setIsLanding] = useState(true);
   return (
-    <div className="bg-gradient-to-b from-[#121031] from-50% to-[#3d2585] w-screen min-h-screen">
+    <div className="bg-gradient-to-b from-[#121031] from-50% to-[#3d2585] min-w-screen min-h-screen">
       <div className="h-100 absolute -top-30 -left-10 w-150 bg-blue-900/50 rounded-full blur-3xl z-0"></div>
       {isLanding ? <Landing setIsLanding={setIsLanding} /> : <PromptPage />}
     </div>
