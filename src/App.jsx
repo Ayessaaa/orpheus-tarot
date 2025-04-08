@@ -42,13 +42,6 @@ const prompt2 =
 const prompt3 =
   ". make it straight to the point, orpheus doesn't care about me he is silly and dumb and might mispell things and not afraid to tell what he wants he speaks like a toddler. dont make it too long ";
 
-const openai = axios.create({
-  baseURL: "https://api.openai.com/v1",
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${API_KEY}`,
-  },
-});
 
 const getOpenAIResponse = async (prompt) => {
   try {
