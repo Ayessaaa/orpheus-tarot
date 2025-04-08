@@ -52,22 +52,14 @@ const openai = axios.create({
 
 const getOpenAIResponse = async (prompt) => {
   try {
-    const response = await openai.post("/chat/completions", {
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
-      max_tokens: 500,
-    });
+    const response = await axios.post("/api/tarot", { prompt });
     return response.data;
   } catch (error) {
-    console.error("OpenAI API error:", error.response?.data || error.message);
+    console.error("Error from /api/tarot:", error);
     throw error;
   }
 };
+
 
 function App() {
   const [isLanding, setIsLanding] = useState(true);
